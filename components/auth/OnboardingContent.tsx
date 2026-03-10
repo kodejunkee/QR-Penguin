@@ -16,7 +16,7 @@ const OnboardingContent: React.FC<OnboardingContentProps> = ({ navigate }) => {
         <View style={styles.content}>
             <View style={styles.logoContainer}>
                 <Image
-                    source={require('../assets/icons/penguin-icon-sideview.png')}
+                    source={require('../../assets/icons/penguin-icon-sideview.png')}
                     style={styles.logo}
                     contentFit="contain"
                 />

@@ -8,9 +8,10 @@ type AuthView = 'onboarding' | 'signin' | 'signup';
 
 interface SigninContentProps {
     navigate: (view: AuthView) => void;
+    onLogin: () => void;
 }
 
-const SigninContent: React.FC<SigninContentProps> = ({ navigate }) => {
+const SigninContent: React.FC<SigninContentProps> = ({ navigate, onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +27,7 @@ const SigninContent: React.FC<SigninContentProps> = ({ navigate }) => {
                         <View style={styles.cardBody}>
                             <View style={styles.header}>
                                 <Image
-                                    source={require('../assets/icons/penguin-icon-sideview.png')}
+                                    source={require('../../assets/icons/penguin-icon-sideview.png')}
                                     style={styles.logo}
                                     contentFit="contain"
                                 />
@@ -71,7 +72,7 @@ const SigninContent: React.FC<SigninContentProps> = ({ navigate }) => {
 
                                 <TouchableOpacity
                                     style={styles.loginButton}
-                                    onPress={() => { /* Handle Login */ }}
+                                    onPress={onLogin}
                                     activeOpacity={0.8}
                                 >
                                     <LinearGradient
@@ -84,14 +85,8 @@ const SigninContent: React.FC<SigninContentProps> = ({ navigate }) => {
                                     </LinearGradient>
                                 </TouchableOpacity>
 
-                                {/* Fingerprint button explicitly excluded as requested */}
-
-                                <TouchableOpacity style={styles.linkButton}>
-                                    <Text style={styles.linkText}>Forgot password?</Text>
-                                </TouchableOpacity>
-
                                 <TouchableOpacity style={styles.linkButton} onPress={() => navigate('signup')}>
-                                    <Text style={styles.linkText}>Sign up</Text>
+                                    <Text style={styles.linkText}>Don't have an account? <Text style={styles.linkTextBold}>Sign up</Text></Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -198,6 +193,9 @@ const styles = StyleSheet.create({
         color: '#88AAFF',
         fontSize: 16,
         fontWeight: '500',
+    },
+    linkTextBold: {
+        fontWeight: '700',
     },
     footer: {
         marginTop: 40,

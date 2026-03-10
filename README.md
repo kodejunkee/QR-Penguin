@@ -1,50 +1,63 @@
-# Welcome to your Expo app 👋
+# QR Penguin 🐧
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A sleek, modern mobile app for generating QR codes — built for university attendance tracking and beyond.
 
-## Get started
+## About
 
-1. Install dependencies
+QR Penguin makes attendance effortless. Students generate a unique QR code tied to their user ID, and can scan them to instantly log attendance. The app features a premium dark UI with animated circuit backgrounds, glassy cards, and smooth transitions.
+
+## Features
+
+- **QR Code Generation** — Generate a QR code from your unique user ID with one tap
+- **Attendance Dashboard** — Visualize attendance history with interactive charts
+- **Animated UI** — Smooth fade transitions, neon accent lighting, and a dynamic circuit background
+- **3-Step Sign Up** — Personal info, academic info, and secure password creation
+
+## Tech Stack
+
+- **React Native** with **Expo** (SDK 52)
+- **Expo Router** — File-based navigation
+- **Reanimated** — Performant 60fps animations and transitions
+- **expo-image** — Optimized image rendering
+- **react-native-svg** — Custom charts and graphics
+- **expo-linear-gradient** — Premium gradient buttons
+
+## Project Structure
+
+```
+app/
+├── _layout.tsx       # Root stack navigator
+├── index.tsx         # Auth screen (onboarding, sign-in, sign-up)
+└── home.tsx          # Home screen (dashboard, scan, settings, create QR)
+
+components/
+├── auth/             # OnboardingContent, SigninContent, SignupContent
+├── home/             # HomeContent, CreateQRContent, ScanContent, SettingsContent
+└── ui/               # CircuitBackground (animated SVG background)
+```
+
+## Getting Started
+
+1. **Install dependencies**
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. **Start the dev server**
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+3. **Run on device**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   Open the app in an [Expo development build](https://docs.expo.dev/develop/development-builds/introduction/) or on an [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/) / [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/).
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Architecture
 
-## Get a fresh project
+QR Penguin uses a **single-screen state-component architecture** for both auth and home flows. Instead of mounting/unmounting heavy screen components on navigation, the app renders one persistent background and swaps lightweight content components via React state — eliminating animation jank and redundant re-renders.
 
-When you're ready, run:
+## License
 
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+© 2026 QR Penguin | Penguins Can Code. All rights reserved.

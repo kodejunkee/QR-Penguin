@@ -1,20 +1,26 @@
+import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { BackHandler, StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import CircuitBackground from '../components/CircuitBackground';
-import OnboardingContent from '../components/OnboardingContent';
-import SigninContent from '../components/SigninContent';
-import SignupContent from '../components/SignupContent';
+import OnboardingContent from '../components/auth/OnboardingContent';
+import SigninContent from '../components/auth/SigninContent';
+import SignupContent from '../components/auth/SignupContent';
+import CircuitBackground from '../components/ui/CircuitBackground';
 
 type AuthView = 'onboarding' | 'signin' | 'signup';
 
 export default function AuthScreen() {
+  const router = useRouter();
   const [activeView, setActiveView] = useState<AuthView>('onboarding');
 
   const navigate = useCallback((view: AuthView) => {
     setActiveView(view);
   }, []);
+
+  const handleLogin = useCallback(() => {
+    router.replace('/home');
+  }, [router]);
 
   // Handle Android back button
   useEffect(() => {
@@ -57,7 +63,7 @@ export default function AuthScreen() {
           exiting={FadeOut.duration(200)}
           style={StyleSheet.absoluteFill}
         >
-          <SigninContent navigate={navigate} />
+          <SigninContent navigate={navigate} onLogin={handleLogin} />
         </Animated.View>
       )}
 

@@ -21,29 +21,25 @@ interface SignupContentProps {
     navigate: (view: AuthView) => void;
 }
 
+const STEP_LABELS = ['Personal Info', 'Academic Info', 'Password'];
+
 const ProgressIndicator = React.memo(({ step }: { step: number }) => {
     return (
         <View style={styles.progressOuterContainer}>
             <View style={styles.progressContainer}>
-                <View style={[styles.progressStep, step === 1 && styles.progressStepActive]}>
-                    <View style={[styles.progressCircle, step === 1 && styles.progressCircleActive]}>
-                        <Text style={[styles.stepText, step === 1 && styles.stepTextActive]}>1</Text>
+                {[1, 2, 3].map((s) => (
+                    <View key={s} style={[styles.progressStep, step === s && styles.progressStepActive]}>
+                        <View style={[styles.progressCircle, step === s && styles.progressCircleActive]}>
+                            <Text style={[styles.stepText, step === s && styles.stepTextActive]}>{s}</Text>
+                        </View>
+                        {step === s && <View style={styles.glowEffect} />}
                     </View>
-                    {step === 1 && <View style={styles.glowEffect} />}
-                </View>
-
-                <View style={styles.progressLine} />
-
-                <View style={[styles.progressStep, step === 2 && styles.progressStepActive]}>
-                    <View style={[styles.progressCircle, step === 2 && styles.progressCircleActive]}>
-                        <Text style={[styles.stepText, step === 2 && styles.stepTextActive]}>2</Text>
-                    </View>
-                    {step === 2 && <View style={styles.glowEffect} />}
-                </View>
+                ))}
             </View>
             <View style={styles.stepLabels}>
-                <Text style={[styles.stepLabel, step === 1 && styles.stepLabelActive]}>Personal Info</Text>
-                <Text style={[styles.stepLabel, step === 2 && styles.stepLabelActive]}>Academic Info</Text>
+                {STEP_LABELS.map((label, i) => (
+                    <Text key={i} style={[styles.stepLabel, step === i + 1 && styles.stepLabelActive]}>{label}</Text>
+                ))}
             </View>
         </View>
     );
@@ -67,6 +63,10 @@ const SignupContent: React.FC<SignupContentProps> = ({ navigate }) => {
     // Step 1 Data
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [matricNumber, setMatricNumber] = useState('');
 
     // Step 2 Data
@@ -75,7 +75,7 @@ const SignupContent: React.FC<SignupContentProps> = ({ navigate }) => {
     const [department, setDepartment] = useState('');
 
     const handleNext = () => {
-        if (step === 1) setStep(2);
+        if (step < 3) setStep(step + 1);
         else {
             // Final submit logic here
             console.log('Final Submit');
@@ -83,7 +83,7 @@ const SignupContent: React.FC<SignupContentProps> = ({ navigate }) => {
     };
 
     const handleBack = () => {
-        if (step === 2) setStep(1);
+        if (step > 1) setStep(step - 1);
         else navigate('signin');
     };
 
@@ -99,10 +99,11 @@ const SignupContent: React.FC<SignupContentProps> = ({ navigate }) => {
 
                     <View style={styles.cardContainer}>
                         <View style={styles.cardBody}>
-                            <Text style={styles.cardTitle}>{step === 1 ? 'Personal Info' : 'Academic Info'}</Text>
+                            <Text style={styles.cardTitle}>{STEP_LABELS[step - 1]}</Text>
 
-                            {step === 1 ? (
+                            {step === 1 && (
                                 <Animated.View
+                                    key="step1"
                                     entering={FadeInRight}
                                     exiting={FadeOutLeft}
                                     style={styles.formStep}
@@ -148,8 +149,11 @@ const SignupContent: React.FC<SignupContentProps> = ({ navigate }) => {
                                         </View>
                                     </View>
                                 </Animated.View>
-                            ) : (
+                            )}
+
+                            {step === 2 && (
                                 <Animated.View
+                                    key="step2"
                                     entering={FadeInRight}
                                     exiting={FadeOutLeft}
                                     style={styles.formStep}
@@ -172,18 +176,77 @@ const SignupContent: React.FC<SignupContentProps> = ({ navigate }) => {
                                 </Animated.View>
                             )}
 
+                            {step === 3 && (
+                                <Animated.View
+                                    key="step3"
+                                    entering={FadeInRight}
+                                    exiting={FadeOutLeft}
+                                    style={styles.formStep}
+                                >
+                                    <View style={styles.inputGroup}>
+                                        <Text style={styles.fieldLabel}>Password</Text>
+                                        <View style={[styles.inputContainer, styles.passwordRow]}>
+                                            <TextInput
+                                                style={[styles.input, { flex: 1 }]}
+                                                placeholder="Create a password"
+                                                placeholderTextColor="rgba(255, 255, 255, 0.3)"
+                                                value={password}
+                                                onChangeText={setPassword}
+                                                secureTextEntry={!showPassword}
+                                            />
+                                            <TouchableOpacity
+                                                onPress={() => setShowPassword(!showPassword)}
+                                                style={styles.eyeIcon}
+                                            >
+                                                <MaterialCommunityIcons
+                                                    name={showPassword ? "eye-off-outline" : "eye-outline"}
+                                                    size={22}
+                                                    color="rgba(136, 170, 255, 0.6)"
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+
+                                    <View style={styles.inputGroup}>
+                                        <Text style={styles.fieldLabel}>Confirm Password</Text>
+                                        <View style={[styles.inputContainer, styles.passwordRow]}>
+                                            <TextInput
+                                                style={[styles.input, { flex: 1 }]}
+                                                placeholder="Re-enter your password"
+                                                placeholderTextColor="rgba(255, 255, 255, 0.3)"
+                                                value={confirmPassword}
+                                                onChangeText={setConfirmPassword}
+                                                secureTextEntry={!showConfirmPassword}
+                                            />
+                                            <TouchableOpacity
+                                                onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                                                style={styles.eyeIcon}
+                                            >
+                                                <MaterialCommunityIcons
+                                                    name={showConfirmPassword ? "eye-off-outline" : "eye-outline"}
+                                                    size={22}
+                                                    color="rgba(136, 170, 255, 0.6)"
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </Animated.View>
+                            )}
+
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={handleNext}
                             >
                                 <View style={styles.buttonGlow} />
-                                <Text style={styles.buttonText}>{step === 1 ? 'Next' : 'Sign Up'}</Text>
+                                <Text style={styles.buttonText}>{step === 3 ? 'Sign Up' : 'Next'}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-                                <Text style={styles.backButtonText}>
-                                    {step === 2 ? 'Back' : 'Already have an account? Sign in'}
-                                </Text>
+                                {step > 1 ? (
+                                    <Text style={styles.backButtonText}>Back</Text>
+                                ) : (
+                                    <Text style={styles.linkText}>Already have an account? <Text style={styles.linkTextBold}>Sign in</Text></Text>
+                                )}
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -229,7 +292,7 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     progressStep: {
-        width: '48%',
+        width: '32%',
         height: 20,
         justifyContent: 'center',
         alignItems: 'center',
@@ -345,6 +408,13 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 16,
     },
+    passwordRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    eyeIcon: {
+        padding: 5,
+    },
     selectorContainer: {
         marginBottom: 20,
     },
@@ -399,6 +469,14 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 14,
         opacity: 0.6,
+    },
+    linkText: {
+        color: '#88AAFF',
+        fontSize: 16,
+        fontWeight: '500',
+    },
+    linkTextBold: {
+        fontWeight: '700',
     },
     footer: {
         marginTop: 30,
